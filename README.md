@@ -1,3 +1,8 @@
+# Mix or Match game 
+This small game originally built with vanilla javascript, not I built in React, with tailwind
+
+Vercel URL: https://mix-or-match-nu.vercel.app/
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

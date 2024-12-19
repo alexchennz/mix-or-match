@@ -174,6 +174,7 @@ function App() {
   function startGame(){
     setStarted(true);
     bgSoundRef.current = new Audio('../assets/Audio/creepy.mp3');
+    bgSoundRef.current.volume = 0.3;
     bgSoundRef.current.play();
     intervalRef.current = setInterval(() => {
       setTimeLeft((prevTime) => {
