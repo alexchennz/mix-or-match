@@ -1,106 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Card from './components/Card'
+import CARDS from './data/cards.json'
 
-const CARDS = [
-  {
-    id: 1,
-    image: '../assets/Images/Bat.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 2,
-    image: '../assets/Images/Bat.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 3,
-    image: '../assets/Images/Bones.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 4,
-    image: '../assets/Images/Bones.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 5,
-    image: '../assets/Images/Cauldron.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 6,
-    image: '../assets/Images/Cauldron.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 7,
-    image: '../assets/Images/Dracula.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 8,
-    image: '../assets/Images/Dracula.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 9,
-    image: '../assets/Images/Eye.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 10,
-    image: '../assets/Images/Eye.png',
-    canFlip: true,
-    toFlip: false
-  }
-  ,
-  {
-    id: 11,
-    image: '../assets/Images/Ghost.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 12,
-    image: '../assets/Images/Ghost.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 13,
-    image: '../assets/Images/Pumpkin.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 14,
-    image: '../assets/Images/Pumpkin.png',
-    canFlip: true,
-    toFlip: false
-  }
-  ,
-  {
-    id: 15,
-    image: '../assets/Images/Skull.png',
-    canFlip: true,
-    toFlip: false
-  },
-  {
-    id: 16,
-    image: '../assets/Images/Skull.png',
-    canFlip: true,
-    toFlip: false
-  }
-]
 
 const totalTime = 60;
 
@@ -119,14 +20,18 @@ function App() {
   const intervalRef = useRef(null);
   const bgSoundRef = useRef(null);
 
+  const playSound = (path) => {
+    const audio = new Audio(path);
+    audio.play();
+  };
+
   function checkCardMatch(card) {
     // console.log('Card:', card);
     if (!card.canFlip || !canClick) return; 
 
     
 
-    const audio = new Audio('../assets/Audio/flip.wav');
-    audio.play();
+    playSound('../assets/Audio/flip.wav');
 
     setCanClick(false); // Disable further clicks
 
@@ -157,7 +62,7 @@ function App() {
   }, []); // Runs only once after the component mounts
 
   function resetCards(){
-    const shuffled = [...CARDS].sort(() => 0.5 - Math.random());
+    const shuffled = [...CARDS.items].sort(() => 0.5 - Math.random());
     setShuffledCards(shuffled);
   }
 
@@ -179,8 +84,7 @@ function App() {
     intervalRef.current = setInterval(() => {
       setTimeLeft((prevTime) => {
         if(prevTime===0){
-          const audio = new Audio('../assets/Audio/gameOver.wav');
-          audio.play();
+          playSound('../assets/Audio/gameOver.wav');
           clearInterval(intervalRef.current);
           bgSoundRef.current.pause();
           setGameOver(true);
@@ -209,8 +113,7 @@ function App() {
         if (currentObject.image === previousObject.image) {
           // currentObject.card.canFlip = false;
           // previousObject.card.canFlip = false;
-          const audio = new Audio('../assets/Audio/match.wav');
-          audio.play();
+          playSound('../assets/Audio/match.wav');
           setShuffledCards((prevCards) =>
             prevCards.map((card) =>
               card.id === currentObject.id || card.id === previousObject.id
@@ -220,11 +123,10 @@ function App() {
           );
           setMatchCount((prevCount) => prevCount + 2);
           // console.log(matchCount)
-          if (matchCount === CARDS.length - 2) {
+          if (matchCount === CARDS.items.length - 2) {
             setVictory(true);
             bgSoundRef.current.pause();
-            const audio = new Audio('../assets/Audio/victory.wav');
-            audio.play();
+            playSound('../assets/Audio/victory.wav');
             // console.log('victory', victory);
 
             if (intervalRef.current) {
